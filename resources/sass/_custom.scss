@@ -1,3 +1,13 @@
 body {
-  background-color: $bg-color;
+  background-color: $color-bg;
+}
+
+.navbar-brand {
+  transition: all ease-in-out 100ms;
+  font-family: $font-typewriter;
+
+  i {
+    color: $color-pink;
+    opacity: .69;
+  }
 }

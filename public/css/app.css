@@ -1,4 +1,15 @@
-body {
+@import url(https://fonts.googleapis.com/css?family=Montserrat:300,300i|Roboto:300,400|Special+Elite&display=swap);body {
   background-color: #F9F6F6;
+}
+
+.navbar-brand {
+  -webkit-transition: all ease-in-out 100ms;
+  transition: all ease-in-out 100ms;
+  font-family: "Special Elite", cursive;
+}
+
+.navbar-brand i {
+  color: #EC1E63;
+  opacity: 0.69;
 }
 
