@@ -31,7 +31,7 @@ class ArticlesController extends Controller
      */
     public function create()
     {
-        //
+        return view('articles.create');
     }
 
     /**
@@ -42,7 +42,20 @@ class ArticlesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required',
+            'body' => 'required'
+        ]);
+
+        // Create Article
+        $article = new Article;
+        $article->title =  $request->input('title');
+        $article->content =  $request->input('body');
+        $article->authorId =  1; // TODO: CHANGE TO CURRENT USER
+        $article->published = true;
+        $article->save();
+
+        return redirect('/articles')->with('success', 'Article Published');
     }
 
     /**

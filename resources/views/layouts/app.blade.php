@@ -13,6 +13,7 @@
   <body>
     @include('includes/navbar')
     <div class="container mt-2 mb-2">
+      @include('includes.messages')
       @yield('content')
     </div>
     

@@ -16,5 +16,10 @@
         <a class="nav-link" href="/articles">Articles</a>
       </li>
     </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+        <a href="/articles/create">Create Article</a>
+      </li>
+    </ul>
   </div>
 </nav>
