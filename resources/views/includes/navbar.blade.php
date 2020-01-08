@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light shadow-sm rounded">
   <a class="navbar-brand" href="/"><i class="fas fa-feather-alt"></i>{{config('app.name', 'Blabber')}}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -17,8 +17,8 @@
       </li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li>
-        <a href="/articles/create">Create Article</a>
+      <li class="nav-item">
+        <a class="nav-link" href="/articles/create">Create Article</a>
       </li>
     </ul>
   </div>
