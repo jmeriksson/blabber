@@ -13,4 +13,13 @@
 
 Route::get('/', 'PagesController@index');
 Route::get('/about', 'PagesController@about');
+Route::get('/login', 'PagesController@login');
+Route::post('/login', 'LoginController@login');
+Route::get('/logout', 'PagesController@index');
+Route::post('/logout', 'LoginController@logout');
+
+
+Route::get('/dashboard', 'DashboardController@index');
+
+Route::resource('authors', 'AuthorsController');
 Route::resource('articles', 'ArticlesController');

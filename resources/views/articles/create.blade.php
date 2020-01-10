@@ -11,6 +11,6 @@
       {{Form::label('body', 'Body')}}
       {{Form::textarea('body', '', ['class' => 'form-control', 'placeholder' => 'Body text...'])}}
     </div>
-    {{Form::submit('Publish', ['class' => 'btn btn-primary'])}}
+    {{Form::submit('Publish', ['class' => 'btn btn-outline-primary'])}}
   {!! Form::close() !!}
 @endsection

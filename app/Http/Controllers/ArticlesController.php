@@ -69,7 +69,7 @@ class ArticlesController extends Controller
         $query =
         "SELECT *
         FROM articles
-        WHERE id = $id";
+        WHERE id = '$id'";
 
         $article = DB::select($query);
         return view('articles.show')->with('article', $article[0]);
@@ -86,7 +86,7 @@ class ArticlesController extends Controller
         $query =
         "SELECT *
         FROM articles
-        WHERE id = $id";
+        WHERE id = '$id'";
 
         $article = DB::select($query);
         return view('articles.edit')->with('article', $article[0]);
@@ -109,7 +109,7 @@ class ArticlesController extends Controller
         $selectQuery =
         "SELECT *
         FROM articles
-        WHERE id = $id";
+        WHERE id = '$id'";
 
         $article = DB::select($selectQuery)[0];
         $article->title =  $request->input('title');
@@ -137,7 +137,7 @@ class ArticlesController extends Controller
         $deleteQuery =
         "DELETE
         FROM articles
-        WHERE id = $id";
+        WHERE id = '$id'";
 
         DB::delete($deleteQuery);
 
