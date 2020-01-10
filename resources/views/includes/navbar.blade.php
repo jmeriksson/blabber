@@ -33,6 +33,9 @@
             <li class="dropdown-item">
               <a href="/articles/create" class="nav-link">Create Article</a>
             </li>
+            <li class="dropdown-item">
+              <a href="/dashboard" class="nav-link">My Dashboard</a>
+            </li>
             <div class="dropdown-divider"></div>
             <li class="dropdown-item">
               <a href="/logout" class="nav-link"

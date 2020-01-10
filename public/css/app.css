@@ -13,3 +13,17 @@
   opacity: 0.69;
 }
 
+.dashboard-article-icons {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.dashboard-article-icons li:first-child {
+  font-size: 2.5rem;
+}
+
+.dashboard-article-icons li a {
+  color: inherit;
+}
+

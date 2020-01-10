@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Article;
 use DB;
 
@@ -51,7 +52,7 @@ class ArticlesController extends Controller
         $article = new Article;
         $article->title =  $request->input('title');
         $article->content =  $request->input('body');
-        $article->authorId =  1; // TODO: CHANGE TO CURRENT USER
+        $article->authorId =  auth()->user()->id;
         $article->published = true;
         $article->save(); // TODO: REPLACE WITH RAW SQL -> DB::INSERT
 
@@ -114,9 +115,6 @@ class ArticlesController extends Controller
         $article = DB::select($selectQuery)[0];
         $article->title =  $request->input('title');
         $article->content =  $request->input('body');
-        /* $article->authorId =  1; // TODO: CHANGE TO CURRENT USER
-        $article->published = true; */
-        /* $article->save(); */
 
         $updateQuery =
         "UPDATE articles

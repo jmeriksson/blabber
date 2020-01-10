@@ -20,16 +20,17 @@ class LoginController extends Controller
         WHERE username = '{$request->input('username')}'";
         $usernameExists = DB::select($usernameExistsQuery);
 
-        if(count($usernameExists) == 0) {
+        // TODO: Decide if this should be deleted. Is it bad to show the user wether a username exists or not?
+        /* if(count($usernameExists) == 0) {
             return redirect('/login')->with('error', "Username {$request->input('username')} is not registered");
-        }
+        } */
 
         $credentials = $request->only('username', 'password');
 
         if (Auth::attempt($credentials)) {
             return redirect()->intended('dashboard');
         } else {
-            return 'did not pass';
+            return redirect('/login')->with('error', 'Wrong username and/or password');
         }
     }
 

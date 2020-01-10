@@ -91,7 +91,7 @@ class AuthorsController extends Controller
      */
     public function show($id)
     {
-        //
+        return 'This is author '. $id;
     }
 
     /**
