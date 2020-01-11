@@ -8,7 +8,7 @@
     <hr>
     <small>Written on {{$article->created_at}}</small>
     <hr>
-  <a href="/articles" role="button" class="btn btn-primary">Go back</a>
+  <a href="#" role="button" class="btn btn-primary" onclick="history.back()">Go back</a>
   
   {!!Form::open(['action' => ['ArticlesController@destroy', $article->id], 'method' => 'POST', 'class' => 'float-right'])!!}
 

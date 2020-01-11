@@ -91,7 +91,36 @@ class AuthorsController extends Controller
      */
     public function show($id)
     {
-        return 'This is author '. $id;
+        $currentUserId = auth()->user()->id;
+
+        $getAuthorQuery =
+        "SELECT *
+        FROM authors
+        WHERE id = '$id'";
+
+        $getArticlesQuery =
+        "SELECT *, LEFT(content, 250) AS excerpt
+        FROM articles
+        WHERE authorId = '$id'
+        ORDER BY created_at DESC";
+
+        $getSubscriptionsQuery =
+        "SELECT publisherId
+        FROM is_subscriber_to
+        WHERE subscriberId = $currentUserId";
+
+        $author = DB::select($getAuthorQuery);
+        $articles = DB::select($getArticlesQuery);
+        $subscriptions = array();
+        foreach(DB::select($getSubscriptionsQuery) as $subscription) {
+            array_push($subscriptions, $subscription->publisherId);
+        }
+
+        return view('authors.show')->with([
+            'author' => $author[0],
+            'articles' => $articles,
+            'subscriptions' => $subscriptions
+            ]);
     }
 
     /**
@@ -126,5 +155,33 @@ class AuthorsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function subscribe(Request $request)
+    {
+        $currentUserId = auth()->user()->id;
+        $publisherId = $request->input('publisherId');
+
+        $addSubscriptionQuery =
+        "INSERT INTO is_subscriber_to (subscriberId, publisherId)
+        VALUES ('$currentUserId', '$publisherId')";
+
+        DB::insert($addSubscriptionQuery);
+        return redirect("/authors/$publisherId");
+    }
+
+    public function unsubscribe(Request $request)
+    {
+        $currentUserId = auth()->user()->id;
+        $publisherId = $request->input('publisherId');
+
+        $deleteSubscriptionQuery =
+        "DELETE
+        FROM is_subscriber_to
+        WHERE subscriberId = '$currentUserId' AND publisherId = '$publisherId'";
+
+        DB::delete($deleteSubscriptionQuery);
+
+        return redirect("/authors/$publisherId");
     }
 }

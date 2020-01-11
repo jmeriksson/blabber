@@ -17,9 +17,9 @@ Route::get('/login', 'PagesController@login');
 Route::post('/login', 'LoginController@login');
 Route::get('/logout', 'PagesController@index');
 Route::post('/logout', 'LoginController@logout');
-
-
 Route::get('/dashboard', 'DashboardController@index');
+Route::post('/authors/subscribe', 'AuthorsController@subscribe');
+Route::post('/authors/unsubscribe', 'AuthorsController@unsubscribe');
 
 Route::resource('authors', 'AuthorsController');
 Route::resource('articles', 'ArticlesController');

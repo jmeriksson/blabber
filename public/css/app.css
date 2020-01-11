@@ -13,14 +13,24 @@
   opacity: 0.69;
 }
 
-.dashboard-article-icons {
-  list-style: none;
-  padding: 0;
-  text-align: center;
+.font-typewriter {
+  font-family: "Special Elite", cursive !important;
 }
 
-.dashboard-article-icons li:first-child {
+.btn-disabled {
+  cursor: initial;
+}
+
+.dashboard-user-icon {
   font-size: 2.5rem;
+}
+
+.dashboard-article-icons {
+  list-style: none;
+}
+
+.dashboard-article-icons li {
+  display: inline-block;
 }
 
 .dashboard-article-icons li a {

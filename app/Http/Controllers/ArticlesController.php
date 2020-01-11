@@ -16,10 +16,16 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $query =
+        /* $query =
         "SELECT *
         FROM articles
-        ORDER BY created_at DESC";
+        ORDER BY created_at DESC"; */
+
+        $query =
+        "SELECT articles.id AS articleId, screenName AS authorScreenName, username AS authorUsername, authors.id AS authorId, articles.created_at AS publishedAt, title, LEFT(content, 250) AS excerpt
+        FROM articles JOIN authors
+        ON authors.id = articles.authorId
+        ORDER BY publishedAt DESC";
 
         $articles = DB::select($query);
         return view('articles.index')->with('articles', $articles);

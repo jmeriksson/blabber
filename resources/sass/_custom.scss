@@ -12,16 +12,23 @@ body {
   }
 }
 
+.font-typewriter {
+  font-family: $font-typewriter !important;
+}
+
+.btn-disabled {
+  cursor: initial;
+}
+
+.dashboard-user-icon {
+  font-size: 2.5rem;
+}
+
 .dashboard-article-icons {
   list-style: none;
-  padding: 0;
-  text-align: center;
 
   li {
-    
-    &:first-child {
-      font-size: 2.5rem;
-    }
+    display: inline-block;
 
     a {
       color: inherit;
