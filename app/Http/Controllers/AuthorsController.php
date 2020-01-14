@@ -10,6 +10,8 @@ use DB;
 
 class AuthorsController extends Controller
 {
+    private $currentUserId = 0;
+
     /**
      * Display a listing of the resource.
      *
@@ -91,35 +93,73 @@ class AuthorsController extends Controller
      */
     public function show($id)
     {
-        $currentUserId = auth()->user()->id;
+        if (Auth::check()) {
+            $this->currentUserId = auth()->user()->id;
+        }
 
         $getAuthorQuery =
         "SELECT *
         FROM authors
         WHERE id = '$id'";
 
+        $author = DB::select($getAuthorQuery);
+
         $getArticlesQuery =
         "SELECT *, LEFT(content, 250) AS excerpt
         FROM articles
         WHERE authorId = '$id'
-        ORDER BY created_at DESC";
+        ORDER BY createdAt DESC";
+
+        $articles = DB::select($getArticlesQuery);
 
         $getSubscriptionsQuery =
         "SELECT publisherId
         FROM is_subscriber_to
-        WHERE subscriberId = $currentUserId";
+        WHERE subscriberId = $this->currentUserId";
 
-        $author = DB::select($getAuthorQuery);
-        $articles = DB::select($getArticlesQuery);
         $subscriptions = array();
         foreach(DB::select($getSubscriptionsQuery) as $subscription) {
             array_push($subscriptions, $subscription->publisherId);
         }
 
+        $getLikedArticlesQuery =
+        "SELECT articleId
+        FROM is_liked_by
+        WHERE authorID = $this->currentUserId";
+
+        $likedArticles = array();
+        foreach(DB::select($getLikedArticlesQuery) as $like) {
+            array_push($likedArticles, $like->articleId);
+        }
+
+        $getNoOfLikesQuery =
+        "SELECT articleId, COUNT(articleId) AS likes
+        FROM is_liked_by
+        GROUP BY articleId";
+
+        $likes = DB::select($getNoOfLikesQuery);
+
+        if (count($likes) > 0) {
+            foreach($likes as $like) {
+                foreach($articles as $article) {
+                    if($like->articleId == $article->id) {
+                        $article->noOfLikes = $like->likes;
+                    }
+                }
+            }
+        }
+
+        foreach($articles as $article) {
+            if (!array_key_exists('noOfLikes', $article)) {
+                $article->noOfLikes = 0;
+            }
+        }
+
         return view('authors.show')->with([
             'author' => $author[0],
             'articles' => $articles,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptions,
+            'likedArticles' => $likedArticles
             ]);
     }
 
@@ -159,12 +199,14 @@ class AuthorsController extends Controller
 
     public function subscribe(Request $request)
     {
-        $currentUserId = auth()->user()->id;
+        if (Auth::check()) {
+            $this->currentUserId = auth()->user()->id;
+        }
         $publisherId = $request->input('publisherId');
 
         $addSubscriptionQuery =
         "INSERT INTO is_subscriber_to (subscriberId, publisherId)
-        VALUES ('$currentUserId', '$publisherId')";
+        VALUES ('$this->currentUserId', '$publisherId')";
 
         DB::insert($addSubscriptionQuery);
         return redirect("/authors/$publisherId");
@@ -172,13 +214,15 @@ class AuthorsController extends Controller
 
     public function unsubscribe(Request $request)
     {
-        $currentUserId = auth()->user()->id;
+        if (Auth::check()) {
+            $this->currentUserId = auth()->user()->id;
+        }
         $publisherId = $request->input('publisherId');
 
         $deleteSubscriptionQuery =
         "DELETE
         FROM is_subscriber_to
-        WHERE subscriberId = '$currentUserId' AND publisherId = '$publisherId'";
+        WHERE subscriberId = '$this->currentUserId' AND publisherId = '$publisherId'";
 
         DB::delete($deleteSubscriptionQuery);
 

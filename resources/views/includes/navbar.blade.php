@@ -34,6 +34,9 @@
             <li class="dropdown-item">
               <a href="/dashboard" class="nav-link">My Dashboard</a>
             </li>
+            <li class="dropdown-item">
+              <a href="/authors/{{Auth::user()->id}}" class="nav-link">My Profile</a>
+            </li>
             <div class="dropdown-divider"></div>
             <li class="dropdown-item">
               <a href="/logout" class="nav-link"

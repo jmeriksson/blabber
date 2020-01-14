@@ -25,12 +25,20 @@
                             <div class="col-12">
                                 <ul class="dashboard-article-icons pl-0 mt-2">
                                     <li class="mb-2">
-                                        <a href="#"><i class="far fa-heart"></i></a>
-                                        <span class="badge badge-secondary badge-pill">25</span>
-                                    </li>
-                                    <li class="mb-2">
-                                        <a href="#"><i class="far fa-comment"></i></a>
-                                        <span class="badge badge-secondary badge-pill">720</span>
+                                        @if(in_array($article->articleId, $likedArticles))
+                                          {!!Form::open(['action' => ['InteractionsController@unlikeArticle'], 'method' => 'POST', 'style' => 'display:inline-block;'])!!}
+                                              {{Form::text('articleId', $article->articleId, ['style' => 'display:none'])}}
+                                              {{Form::text('currentPosition', '/dashboard', ['style' => 'display:none'])}}
+                                              {{Form::button('<i class="fas fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;color:red;"'])}}
+                                          {!!Form::close()!!}
+                                        @else
+                                          {!!Form::open(['action' => ['InteractionsController@likeArticle'], 'method' => 'POST', 'style' => 'display:inline-block;'])!!}
+                                              {{Form::text('articleId', $article->articleId, ['style' => 'display:none'])}}
+                                              {{Form::text('currentPosition', '/dashboard', ['style' => 'display:none'])}}
+                                              {{Form::button('<i class="far fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;"'])}}
+                                          {!!Form::close()!!}
+                                        @endif
+                                          <span class="badge badge-secondary badge-pill">{{$article->noOfLikes}}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -48,10 +56,8 @@
 
                 <div class="card-body">
                     <ul class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action">View your articles</a>
-                        <a href="#" class="list-group-item list-group-item-action">Create new article</a>
-                        <a href="#" class="list-group-item list-group-item-action">View your profile</a>
-                        <a href="#" class="list-group-item list-group-item-action">Log out</a>
+                        <a href="/articles/create" class="list-group-item list-group-item-action">Create new article</a>
+                        <a href="/authors/{{Auth::user()->id}}" class="list-group-item list-group-item-action">View your profile</a>
                     </ul>
                 </div>
             </div>

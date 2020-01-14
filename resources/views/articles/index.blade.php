@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-  <h1>Top Rated Articles</h1>
+  <h1>Our Latest Articles</h1>
   @if(count($articles) > 0)
     @foreach($articles as $article)
     <div class="card mb-1">
       <div class="card-body">
           <div class="row no-gutters">
               <div class="col-md-1 text-center">
-                  <a href="#" class="dashboard-user-icon mx-auto text-dark"><i class="fas fa-user-circle"></i></a>
+                  <a href="/authors/{{$article->authorId}}" class="dashboard-user-icon mx-auto text-dark"><i class="fas fa-user-circle"></i></a>
               </div>
               <div class="col-md-11 pl-2">
               <h4 class="card-title mb-0 font-typewriter"><a href="/authors/{{$article->authorId}}" class ="text-dark">{{$article->authorScreenName}}</a></h4>
@@ -24,12 +24,20 @@
               <div class="col-12">
                   <ul class="dashboard-article-icons pl-0 mt-2">
                       <li class="mb-2">
-                          <a href="#"><i class="far fa-heart"></i></a>
-                          <span class="badge badge-secondary badge-pill">25</span>
-                      </li>
-                      <li class="mb-2">
-                          <a href="#"><i class="far fa-comment"></i></a>
-                          <span class="badge badge-secondary badge-pill">720</span>
+                          @if(in_array($article->articleId, $likedArticles))
+                            {!!Form::open(['action' => ['InteractionsController@unlikeArticle'], 'method' => 'POST', 'style' => 'display:inline-block;'])!!}
+                                {{Form::text('articleId', $article->articleId, ['style' => 'display:none'])}}
+                                {{Form::text('currentPosition', '/articles', ['style' => 'display:none'])}}
+                                {{Form::button('<i class="fas fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;color:red;"'])}}
+                            {!!Form::close()!!}
+                          @else
+                            {!!Form::open(['action' => ['InteractionsController@likeArticle'], 'method' => 'POST', 'style' => 'display:inline-block;'])!!}
+                                {{Form::text('articleId', $article->articleId, ['style' => 'display:none'])}}
+                                {{Form::text('currentPosition', '/articles', ['style' => 'display:none'])}}
+                                {{Form::button('<i class="far fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;"'])}}
+                            {!!Form::close()!!}
+                          @endif
+                            <span class="badge badge-secondary badge-pill">{{$article->noOfLikes}}</span>
                       </li>
                   </ul>
               </div>

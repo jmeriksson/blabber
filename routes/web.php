@@ -20,6 +20,8 @@ Route::post('/logout', 'LoginController@logout');
 Route::get('/dashboard', 'DashboardController@index');
 Route::post('/authors/subscribe', 'AuthorsController@subscribe');
 Route::post('/authors/unsubscribe', 'AuthorsController@unsubscribe');
+Route::post('/likeArticle', 'InteractionsController@likeArticle');
+Route::post('/unlikeArticle', 'InteractionsController@unlikeArticle');
 
 Route::resource('authors', 'AuthorsController');
 Route::resource('articles', 'ArticlesController');
