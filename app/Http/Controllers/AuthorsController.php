@@ -45,11 +45,14 @@ class AuthorsController extends Controller
         "SELECT *
         FROM authors
         WHERE username = '{$request->input('username')}'";
+
         $usernameExists = DB::select($usernameExistsQuery);
+
         $emailExistsQuery =
         "SELECT *
         FROM authors
         WHERE username = '{$request->input('email')}'";
+        
         $emailExists = DB::select($emailExistsQuery);
 
         if(count($usernameExists) > 0) {

@@ -38,7 +38,13 @@
                                               {{Form::button('<i class="far fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;"'])}}
                                           {!!Form::close()!!}
                                         @endif
-                                          <span class="badge badge-secondary badge-pill">{{$article->noOfLikes}}</span>
+                                          <span class="badge badge-secondary badge-pill">
+                                              @if($article->likes)
+                                                {{$article->likes}}
+                                              @else 
+                                                0
+                                              @endif
+                                            </span>
                                     </li>
                                 </ul>
                             </div>

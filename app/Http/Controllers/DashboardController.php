@@ -32,11 +32,13 @@ class DashboardController extends Controller
         }
 
         $getArticlesQuery =
-        "SELECT articles.id AS articleId, screenName AS authorScreenName, username AS authorUsername, authors.id AS authorId, articles.createdAt AS publishedAt, title, LEFT(content, 250) AS excerpt
+        "SELECT articles.id AS articleId, screenName AS authorScreenName, username AS authorUsername, authors.id AS authorId, articles.createdAt AS publishedAt, title, LEFT(content, 250) AS excerpt, likes
         FROM articles JOIN authors JOIN is_subscriber_to
-        ON $this->currentUserId = subscriberId
+        ON subscriberId = $this->currentUserId
         AND publisherId = articles.authorId
         AND authors.id = articles.authorId
+        LEFT JOIN no_of_likes
+        ON articles.id = no_of_likes.articleId
         ORDER BY publishedAt DESC";
 
         $articles = DB::select($getArticlesQuery);
@@ -49,29 +51,6 @@ class DashboardController extends Controller
         $likedArticles = array();
         foreach(DB::select($getLikedArticlesQuery) as $like) {
             array_push($likedArticles, $like->articleId);
-        }
-
-        $getNoOfLikesQuery =
-        "SELECT articleId, COUNT(articleId) AS likes
-        FROM is_liked_by
-        GROUP BY articleId";
-
-        $likes = DB::select($getNoOfLikesQuery);
-
-        if (count($likes) > 0) {
-            foreach($likes as $like) {
-                foreach($articles as $article) {
-                    if($like->articleId == $article->articleId) {
-                        $article->noOfLikes = $like->likes;
-                    }
-                }
-            }
-        }
-
-        foreach($articles as $article) {
-            if (!array_key_exists('noOfLikes', $article)) {
-                $article->noOfLikes = 0;
-            }
         }
 
         return view('dashboard')->with([
