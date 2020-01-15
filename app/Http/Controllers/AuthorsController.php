@@ -52,7 +52,7 @@ class AuthorsController extends Controller
         "SELECT *
         FROM authors
         WHERE username = '{$request->input('email')}'";
-        
+
         $emailExists = DB::select($emailExistsQuery);
 
         if(count($usernameExists) > 0) {
@@ -83,9 +83,7 @@ class AuthorsController extends Controller
 
         DB::insert($storeUserQuery);
 
-        Auth::login($author);
-
-        return redirect('/dashboard')->with('success', 'Author created. Welcome to Blabber!');
+        return redirect('/login')->with('success', 'Author created. Welcome to Blabber! You can now log in.');
     }
 
     /**
@@ -101,29 +99,22 @@ class AuthorsController extends Controller
         }
 
         $getAuthorQuery =
-        "SELECT *
-        FROM authors
-        WHERE id = '$id'";
+        "SELECT id, username, screenName, COUNT(subscriberId) AS subscribes
+        FROM authors LEFT JOIN is_subscriber_to
+        ON publisherId = '$id' AND subscriberId = '$this->currentUserId'
+        WHERE authors.id = '$id'
+        GROUP BY id, username, screenName";
 
-        $author = DB::select($getAuthorQuery);
+        $author = DB::select($getAuthorQuery)[0];
 
         $getArticlesQuery =
-        "SELECT *, LEFT(content, 250) AS excerpt
-        FROM articles
+        "SELECT id, title, authorId, createdAt, LEFT(content, 250) AS excerpt, likes
+        FROM articles LEFT JOIN no_of_likes
+        ON articles.id = no_of_likes.articleId
         WHERE authorId = '$id'
         ORDER BY createdAt DESC";
 
         $articles = DB::select($getArticlesQuery);
-
-        $getSubscriptionsQuery =
-        "SELECT publisherId
-        FROM is_subscriber_to
-        WHERE subscriberId = $this->currentUserId";
-
-        $subscriptions = array();
-        foreach(DB::select($getSubscriptionsQuery) as $subscription) {
-            array_push($subscriptions, $subscription->publisherId);
-        }
 
         $getLikedArticlesQuery =
         "SELECT articleId
@@ -135,33 +126,9 @@ class AuthorsController extends Controller
             array_push($likedArticles, $like->articleId);
         }
 
-        $getNoOfLikesQuery =
-        "SELECT articleId, COUNT(articleId) AS likes
-        FROM is_liked_by
-        GROUP BY articleId";
-
-        $likes = DB::select($getNoOfLikesQuery);
-
-        if (count($likes) > 0) {
-            foreach($likes as $like) {
-                foreach($articles as $article) {
-                    if($like->articleId == $article->id) {
-                        $article->noOfLikes = $like->likes;
-                    }
-                }
-            }
-        }
-
-        foreach($articles as $article) {
-            if (!array_key_exists('noOfLikes', $article)) {
-                $article->noOfLikes = 0;
-            }
-        }
-
         return view('authors.show')->with([
-            'author' => $author[0],
+            'author' => $author,
             'articles' => $articles,
-            'subscriptions' => $subscriptions,
             'likedArticles' => $likedArticles
             ]);
     }

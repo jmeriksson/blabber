@@ -98,19 +98,13 @@ class ArticlesController extends Controller
             $this->currentUserId = auth()->user()->id;
         }
 
-        $getArticleQuery =
-        "SELECT *
-        FROM articles
-        WHERE id = '$id'";
+        $getCurrentArticleQuery =
+        "SELECT articles.id AS id, title, content, createdAt, authorId, screenName AS authorScreenName
+        FROM articles JOIN authors
+        ON authorId = authors.id
+        WHERE articles.id = '$id'";
 
-        $article = DB::select($getArticleQuery)[0];
-
-        $getAuthorQuery =
-        "SELECT *
-        FROM authors
-        WHERE id = $article->authorId";
-
-        $author = DB::select($getAuthorQuery)[0];
+        $currentArticle = DB::select($getCurrentArticleQuery)[0];
 
         $getLikedArticlesQuery =
         "SELECT articleId
@@ -123,8 +117,7 @@ class ArticlesController extends Controller
         }
         
         return view('articles.show')->with([
-            'article' => $article,
-            'author' => $author,
+            'article' => $currentArticle,
             'likedArticles' => $likedArticles
             ]);
     }

@@ -9,7 +9,7 @@
           <h2 class="card-title">{{$author->screenName}}</h2>
           <h5 class="card-subtitle text-muted">&#64;{{$author->username}}</h4>
           @if(!Auth::guest() && Auth::user()->id !== $author->id)
-            @if (in_array($author->id, $subscriptions))
+            @if ($author->subscribes > 0)
               <button class="btn btn-primary mt-4 btn-disabled" disabled><i class="fas fa-check"></i> Subscribing</button>
               {!! Form::open(['action' => 'AuthorsController@unsubscribe', 'method' => 'POST']) !!}
                 {{Form::text('publisherId', $author->id, ['style' => 'display:none'])}}
@@ -49,7 +49,13 @@
                       {{Form::button('<i class="far fa-heart"></i>', ['type' => 'submit', 'style="background:none;border:none;padding:0;"'])}}
                   {!!Form::close()!!}
                 @endif
-                <span class="badge badge-secondary badge-pill">{{$article->noOfLikes}}</span>
+                <span class="badge badge-secondary badge-pill">
+                  @if($article->likes)
+                    {{$article->likes}}
+                  @else
+                    0
+                  @endif
+                </span>
               </li>
             </ul>
           </div>
