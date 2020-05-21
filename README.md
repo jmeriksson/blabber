@@ -1,5 +1,8 @@
 # Blabber
 
+[![GitHub issues](https://img.shields.io/github/issues/jmeriksson/blabber)](https://github.com/jmeriksson/blabber/issues)
+[![GitHub license](https://img.shields.io/github/license/jmeriksson/blabber)](https://github.com/jmeriksson/blabber/blob/master/LICENSE)
+
 Blabber is a social media platform for journalists and writers. Users (called "authors") can write articles, read other authors' articles, follow their favorite authors, and much more. Blabber is created as a school project for a Database Theory course (2DV513) at Linnaeus University. Feel free to use parts or all of this software in any way.
 
 ## Setting up
